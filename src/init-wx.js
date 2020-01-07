@@ -6,17 +6,16 @@ const hjweixinUrl = 'https://res.wx.qq.com/open/js/jweixin-1.4.0.js';
 
 const failHandler = (methodName) => {
     return res => {
-        hjc.debug(JSON.stringify(res));
+        console.log(JSON.stringify(res));
     };
     // return () => {};
 };
-const env = getEnv();
 
 let isWxSdkLoading = false;
 let isWxSdkLoaded = false;
 let callbacks = [];
 
-export function initWxScript(wxAppId, accesstokenUrl, cb) {
+export function initWxScript(accesstokenUrl, cb) {
     // 如果微信sdk已经初始化了，直接执行回调函数
     if (isWxSdkLoaded) {
         cb && cb();
@@ -31,7 +30,7 @@ export function initWxScript(wxAppId, accesstokenUrl, cb) {
     lazyLoadScript(hjweixinUrl, () => {
         $.getJSON(accesstokenUrl, null, data => {
             wx.config({
-                debug: !!hjc.query('debug'),
+                debug: true,
                 appId: data.appId,
                 timestamp: data.timeStamp,
                 nonceStr: data.nonceStr,

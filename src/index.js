@@ -9,6 +9,8 @@ const failHandler = (methodName) => {
 
 const tooShortMsg = '录音时间太短啦，请重新开始～';
 
+const isweixin = false;
+
 export default class AudioUtility {
     constructor() {
         this._isBrigeReady = false;
@@ -139,7 +141,7 @@ export default class AudioUtility {
         if (AudioUtility._instance) {
             return AudioUtility._instance;
         }
-        AudioUtility._instance = hjc.ishjapp ? new HjAudioUtility() : (hjc.isweixin ? new WxAudioUtility() : new H5AudioUtility());
+        AudioUtility._instance = (isweixin ? new WxAudioUtility() : new H5AudioUtility());
         return AudioUtility._instance;
     }
 }
@@ -158,10 +160,7 @@ class WxAudioUtility extends AudioUtility {
     startRecord_() {
         wx.startRecord({
             fail: function (res) {
-                hjc.showToast({
-                    content: res.errMsg,
-                    time: 3000
-                });
+                alert(res.errMsg);
             }
         });
     }
