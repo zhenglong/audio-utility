@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "start": "webpack",
-        "demo": "http-server ."
+        "demo": "http-server -S ."
     },
     "repository": {
         "type": "git",

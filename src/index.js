@@ -9,7 +9,7 @@ const failHandler = (methodName) => {
 
 const tooShortMsg = '录音时间太短啦，请重新开始～';
 
-const isweixin = false;
+const isweixin = navigator.userAgent.toLowerCase().indexOf('micromessenger') > -1;
 
 export default class AudioUtility {
     constructor() {
@@ -71,7 +71,7 @@ export default class AudioUtility {
             if (!this.audioElem) {
                 this.audioElem = document.createElement('audio');
                 this.audioElem.style.cssText = 'display:none';
-                $('body').append($(this.audioElem));
+                document.body.appendChild(this.audioElem);
             }
             this.audioElem.src = url;
             if (onCompleteCallback) {
@@ -245,3 +245,5 @@ class H5AudioUtility extends AudioUtility {
         console.log('H5 only: nothing to do');
     }
 }
+
+window.AudioUtility = AudioUtility;

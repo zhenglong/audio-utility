@@ -1,3 +1,11 @@
+export function cacheable(fn, context) {
+    var __cache__ = {};
+    return function () {
+        var args = [].slice.call(arguments, 0);
+        args.push(__cache__);
+        return fn.apply(context || null, args);
+    };
+}
 export const getTemplate = cacheable(function (id, __cache__) {
     if (!__cache__[id]) {
         __cache__[id] = $(`#${id}`).html();

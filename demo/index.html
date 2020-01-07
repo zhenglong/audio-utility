@@ -4,15 +4,75 @@
     <title>video player demo</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <style>
+    button {
+        margin: 20px 0;
+        display: block;
+        width: 100%;
+        background-color: #3ff20d;
+        color: white;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        outline:0;
+        border:0;
+    }
+    </style>
 </head>
 <body>
     <button type="button" id="btn-record">开始录音</button>
     <button type="button" id="btn-playback">回放录音</button>
-    <script src="../dist/audio-utility.js"></script>
+
+    <script src="../dist/audio-utility.506708a9.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/eruda"></script>
     <script>
     window.onload = function() {
+        var isRecording = false;
+        var isPlaying = false;
+        var btnRecord = document.getElementById('btn-record');
+        var btnPlayback = document.getElementById('btn-playback');
+        var audioUtility = AudioUtility.getInstance();
+        var blob = null;
+        btnRecord.addEventListener('click', function() {
+            if (!audioUtility.isRecordingSupported()) {
+                alert('录音接口暂不支持');
+                return;
+            }
+            if (isRecording) {
+                // 停止录音
+                audioUtility.stopRecord().then(function(data) {
+                    blob = data.blob;
+                });
+                btnRecord.innerText = '开始录音';
 
+            } else {
+                // 开始录音
+                audioUtility.startRecord();
+                btnRecord.innerText = '停止录音';
+            }
+            isRecording = !isRecording;
+        });
+        btnPlayback.addEventListener('click', function() {
+            if (isPlaying) {
+                audioUtility.pauseAudio();
+                btnPlayback.innerText = '回放录音';
+            } else {
+                audioUtility.playAudio(URL.createObjectURL(blob), function() {
+                    console.log('onCompleteCallback');
+                    isPlaying = false;
+                    btnPlayback.innerText = '回放录音';
+                });
+                btnPlayback.innerText = '暂停回放';
+            }
+            isPlaying = !isPlaying;
+        });
+        eruda.init();
     };
+    (function () {
+    var src = '';
+    document.write('<scr' + 'ipt src="' + src + '"></scr' + 'ipt>');
+    document.write('<scr' + 'ipt></scr' + 'ipt>');
+})();
     </script>
 </body>
 </html>
